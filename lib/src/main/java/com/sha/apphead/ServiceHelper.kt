@@ -14,7 +14,7 @@ internal object ServiceHelper {
 
     fun stop(clazz: Class<*>, context: Context) {
         runCatching {
-            context.startService(Intent(context, clazz))
+            context.stopService(Intent(context, clazz))
         }
     }
 }
