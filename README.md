@@ -17,10 +17,9 @@ allprojects {
 }
 
 dependencies {
-     implementation 'com.github.ShabanKamell:AppHead:x.y.z'
+      implementation 'com.github.abadoliverco:AppHead:0.5.0'
 }
 ```
-(Please replace x, y and z with the latest version numbers:  [![](https://jitpack.io/v/ShabanKamell/AppHead.svg)](https://jitpack.io/#ShabanKamell/AppHead))
 
 ### Usage
 The most simple usage
