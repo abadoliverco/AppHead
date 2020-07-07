@@ -81,7 +81,7 @@ class HeadView : FrameLayout {
     override fun onFinishInflate() {
         super.onFinishInflate()
 
-        Head.headViewArgs.run {
+        Head.headViewArgs?.run {
             image = findViewById<ImageView>(imageViewId).apply {
                 setImageResource(drawableRes)
             }
@@ -91,9 +91,11 @@ class HeadView : FrameLayout {
 
         // catch exceptions thrown here as the library user may think it's
         // a library exception
-        Head.headViewArgs.runCatching {
-            setupImage?.invoke(image)
-        }.onFailure { print("Exception thrown in HeAdView image setup: ${it.stackTrace}") }
+        if (Head.headViewArgs != null) {
+            Head.headViewArgs!!.runCatching {
+                setupImage?.invoke(image)
+            }.onFailure { print("Exception thrown in HeAdView image setup: ${it.stackTrace}") }
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -162,8 +164,8 @@ class HeadView : FrameLayout {
         val isInBounds = xCord in xBoundStart..xBoundEnd && yCord >= yBoundTop
         if (!isInBounds) return false
 
-        val xCordDismiss = ((szWindow.x - dismissView.currentHeight * dismissView.scaleRatio) / 2).toInt()
-        val yCordDismiss = (szWindow.y - (dismissView.currentWidth * dismissView.scaleRatio + statusBarHeight)).toInt()
+        val xCordDismiss = ((szWindow.x - dismissView.currentHeight * dismissView.scaleRatio!!) / 2).toInt()
+        val yCordDismiss = (szWindow.y - (dismissView.currentWidth * dismissView.scaleRatio!! + statusBarHeight)).toInt()
         inBounded = true
 
         dismissView.onHeadInBounds(xCordDismiss, yCordDismiss)
@@ -228,7 +230,7 @@ class HeadView : FrameLayout {
     var bounceCountDownTimer: CountDownTimer? = null
 
     private fun moveToStart(xCord: Int) {
-        if(!Head.headViewArgs.allowBounce) {
+        if(!Head.headViewArgs?.allowBounce!!) {
             params.x = 0
             WindowManagerHelper.updateViewLayout(this@HeadView, params)
             return
@@ -251,7 +253,7 @@ class HeadView : FrameLayout {
     }
 
     private fun saveLastScreenLocation() {
-        if(!Head.headViewArgs.preserveScreenLocation) return
+        if(!Head.headViewArgs?.preserveScreenLocation!!) return
         SharedPref(context).lastScreenLocation = ScreenLocation(
                 params.x,
                 params.y,
@@ -259,7 +261,7 @@ class HeadView : FrameLayout {
     }
 
     private fun moveToEnd(xCord: Int) {
-        if(!Head.headViewArgs.allowBounce) {
+        if(!Head.headViewArgs?.allowBounce!!) {
             params.x = szWindow.x - width
             WindowManagerHelper.updateViewLayout(this@HeadView, params)
             return
@@ -461,7 +463,7 @@ class HeadView : FrameLayout {
     companion object {
         fun setup(context: Context): HeadView {
 
-            val view: View = LayoutInflaterHelper.inflateView(Head.headViewArgs.layoutRes, context)
+            val view: View = LayoutInflaterHelper.inflateView(Head.headViewArgs?.layoutRes!!, context)
 
             require(view is HeadView) { "The root view of head view must be HeadView!" }
 

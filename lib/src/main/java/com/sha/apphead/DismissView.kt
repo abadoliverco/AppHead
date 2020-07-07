@@ -20,7 +20,7 @@ class DismissView: RelativeLayout {
         get() = 1.5
 
     val scaleRatio
-        get() = Head.dismissViewArgs.scaleRatio
+        get() = Head.dismissViewArgs?.scaleRatio
 
     private lateinit var image: ImageView
 
@@ -52,7 +52,7 @@ class DismissView: RelativeLayout {
 
     override fun onFinishInflate() {
         super.onFinishInflate()
-        Head.dismissViewArgs.run {
+        Head.dismissViewArgs?.run {
             image = findViewById(imageViewId)
             image.setImageResource(drawableRes)
             image.alpha = alpha
@@ -61,9 +61,11 @@ class DismissView: RelativeLayout {
 
         // catch exceptions thrown here as the library user may think it's
         // a library exception
-        Head.dismissViewArgs.runCatching {
-            setupImage?.invoke(image)
-        }.onFailure { print("Exception thrown in DismissView image setup: ${it.stackTrace}") }
+        if (Head.dismissViewArgs != null) {
+            Head.dismissViewArgs!!.runCatching {
+                setupImage?.invoke(image)
+            }.onFailure { print("Exception thrown in DismissView image setup: ${it.stackTrace}") }
+        }
     }
 
     private fun setup() {
@@ -74,8 +76,8 @@ class DismissView: RelativeLayout {
     fun onHeadInBounds(xCord: Int, yCord: Int) {
         if (imgHeight != currentHeight) return
 
-        imgWidth = (currentWidth * scaleRatio).toInt()
-        imgHeight = (currentHeight * scaleRatio).toInt()
+        imgWidth = (currentWidth * scaleRatio!!).toInt()
+        imgHeight = (currentHeight * scaleRatio!!).toInt()
 
         val params = layoutParams as WindowManager.LayoutParams
         params.x = xCord
@@ -186,7 +188,7 @@ class DismissView: RelativeLayout {
 
     companion object {
         fun setup(context: Context): DismissView {
-            val view: View = LayoutInflaterHelper.inflateView(Head.dismissViewArgs.layoutRes, context)
+            val view: View = LayoutInflaterHelper.inflateView(Head.dismissViewArgs?.layoutRes!!, context)
 
             require(view is DismissView) { "The root view of dismiss view must be DismissView!" }
 
