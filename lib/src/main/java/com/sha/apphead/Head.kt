@@ -9,13 +9,13 @@ object Head {
     internal var args: AppHeadArgs? = null
 
     internal val headViewArgs
-        get() = args!!.headViewArgs
+        get() = args?.headViewArgs
 
     internal val dismissViewArgs
-        get() = args!!.dismissViewArgs
+        get() = args?.dismissViewArgs
 
     internal val badgeViewArgs: BadgeView.Args?
-        get() = args!!.badgeViewArgs
+        get() = args?.badgeViewArgs
 
     var badgeView: BadgeView?
         get() = args?.badgeView
